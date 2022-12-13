@@ -21,8 +21,8 @@ class UrbanSoundDataset(Dataset):
         audio_sample_path = self._get_audio_sample_path(index)
         label = self._get_audi_sample_label(index)
         signal, sr = torchaudio.load(audio_sample_path) 
-        signal = self._resample_if_necessary(signal, sr)
-        signal = self._mix_down_if_necessary(signal)
+        signal = self._resample_if_necessary(signal, sr) # standardize sample rate
+        signal = self._mix_down_if_necessary(signal) # mix down to mono
         signal = self.transformation(signal) # apply whatever transformation passed in
         return signal, label
 
@@ -48,8 +48,8 @@ class UrbanSoundDataset(Dataset):
 
 
 if __name__ == 'main':
-    ANNOTATIONS_FILE = ''
-    AUDIO_DIR = ''
+    ANNOTATIONS_FILE = os.getenv('ANNOTATIONS_FILE')
+    AUDIO_DIR = os.getenv('AUDIO_DIR')
     SAMPLE_RATE = 16000
 
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
@@ -59,8 +59,13 @@ if __name__ == 'main':
         n_mels=64
     )
 
-    usd = UrbanSoundDataset(ANNOTATIONS_FILE, AUDIO_DIR, mel_spectrogram, SAMPLE_RATE)
+    #ms = mel_spectrogram(signal)
+
+    usd = UrbanSoundDataset(ANNOTATIONS_FILE, AUDIO_DIR, 
+                            transformation=mel_spectrogram, 
+                            target_sample_rate=SAMPLE_RATE)
 
     print(f'There are {len(usd)} samples in the dataset')
 
     signal, label  = usd[0]
+    print(signal.shape, label)
