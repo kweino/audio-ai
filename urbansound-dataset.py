@@ -75,7 +75,7 @@ if __name__ == 'main':
     AUDIO_DIR = os.getenv('AUDIO_DIR')
     SAMPLE_RATE = 22050
     NUM_SAMPLES = 22050
-    print(ANNOTATIONS_FILE)
+
     mel_spectrogram = torchaudio.transforms.MelSpectrogram(
         sample_rate=SAMPLE_RATE,
         n_fft=1024,

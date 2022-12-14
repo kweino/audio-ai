@@ -4,12 +4,16 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-# 1- download dataset
-# 2- create data loader
-# 3- build model
-# 4- train
-# 5- save trained model
+"""Builds a basic feed-forward model for the MNIST Dataset
 
+Steps:
+1- download dataset
+2- create data loader
+3- build model
+4- train
+5- save trained model
+
+"""
 BATCH_SIZE = 128
 EPOCHS=10
 LEARNING_RATE = 0.001
@@ -35,13 +39,13 @@ class FeedForwardNet(nn.Module):
 
 def download_mnist_datasets():
     train_data = datasets.MNIST(
-        root="data",
+        root="./data",
         download=True,
         train=True,
         transform=ToTensor()
     )
     validation_data = datasets.MNIST(
-        root="data",
+        root="./data",
         download=True,
         train=False,
         transform=ToTensor()
@@ -57,9 +61,9 @@ def train_one_epoch(model, data_loader, loss_fn, optimizer, device):
         loss = loss_fn(predictions, targets)
 
         #backpropagate loss and update weights
-        optimizer.zero_grad() # reset gradients
-        loss.backward() # apply backpropogation
-        optimizer.step() # update
+        optimizer.zero_grad() #reset gradients
+        loss.backward() #apply backpropogation
+        optimizer.step() #update
 
     print(f'Loss: {loss.item()}')
 
@@ -72,14 +76,14 @@ def train(model, data_loader, loss_fn, optimizer, device, epochs):
     print('Training done!')
 
 if __name__ == "__main__":
-    # download MNIST 
+    #download MNIST 
     train_data, _ = download_mnist_datasets()
     print('mnist data downloaded')
 
     #create a data loader for the train set
     train_data_loader = DataLoader(train_data, batch_size=BATCH_SIZE)
 
-    # build model
+    #build model
     if torch.cuda.is_available():
         device = 'cuda'
     else:
