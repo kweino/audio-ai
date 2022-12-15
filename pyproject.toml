@@ -5,10 +5,14 @@ description = ""
 authors = ["Kevin Weingarten <weingarten.kevin@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.11"
 torchaudio = "0.12.1"
 torchvision = "0.13.1"
 pandas = "^1.5.2"
+torchsummary = "^1.5.1"
+python-dotenv = "^0.21.0"
+tensorflow = "^2.11.0"
+keras = "^2.11.0"
 
 
 
