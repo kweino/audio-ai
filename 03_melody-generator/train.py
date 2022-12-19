@@ -1,5 +1,5 @@
 import json
-import tensorflow.keras as keras
+from tensorflow import keras
 from preprocess import generate_training_sequences, SEQUENCE_LENGTH, MAPPING_PATH
 
 with open(MAPPING_PATH, 'r') as fp:
@@ -46,7 +46,7 @@ def train(output_units=OUTPUT_UNITS, num_units=NUM_UNITS, loss=LOSS, learning_ra
     model.fit(inputs, targets, epochs=EPOCHS, batch_size=BATCH_SIZE)
 
     # save the model
-    model.save('SAVE_MODEL_PATH')
+    model.save(SAVE_MODEL_PATH)
 
 if __name__ == '__main__':
     train()

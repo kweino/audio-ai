@@ -4,16 +4,9 @@ import json
 from dotenv import load_dotenv
 import numpy as np
 import music21 as m21
-import tensorflow.keras as keras
+from tensorflow import keras
 
-'''
-Steps
-1. load folk songs
-2. filter out songs that have unacceptable durations
-3. transpose songs to C / Am
-4. encode songs with music time series representation
-5. save songs to text file
-'''
+
 
 # Load the environment variables from the project .env file in the parent folder
 dotenv_path = os.path.join(os.path.dirname(__file__), '../', '.env')
@@ -115,7 +108,14 @@ def encode_song(song, time_step=0.25):
     return encoded_song
 
 def preprocess(dataset_path, input_file_type):
-
+    '''
+    Preprocessing Steps
+    1. load folk songs
+    2. filter out songs that have unacceptable durations
+    3. transpose songs to C / Am
+    4. encode songs with music time series representation
+    5. save songs to text file
+    '''
     # load songs
     print('Loading songs...')
     songs = load_original_songs(dataset_path, input_file_type)
@@ -216,6 +216,8 @@ def generate_training_sequences(sequence_length):
     inputs = keras.utils.to_categorical(inputs, num_classes=vocab_size)
     targets = np.array(targets)
 
+    print(f'There are {len(inputs)} sequences')
+
     return inputs, targets
 
 
@@ -223,17 +225,22 @@ def generate_training_sequences(sequence_length):
 
 def main():
     print('Preprocessing...')
-    preprocess(INPUT_FILE_PATH, INPUT_FILE_TYPE)
+    try:
+        load_song(SINGLE_FILE_DATASET)
+        print('Single file found.')
+    except OSError:
 
-    print('Preprocessing complete. Concatenating files...')
-    songs = create_single_file_dataset(SAVE_DIR, SINGLE_FILE_DATASET, SEQUENCE_LENGTH)
+        preprocess(INPUT_FILE_PATH, INPUT_FILE_TYPE)
 
-    print('Files concatenated. Creating mapping & converting songs...')
+        print('Preprocessing complete. Concatenating files...')
+        songs = create_single_file_dataset(SAVE_DIR, SINGLE_FILE_DATASET, SEQUENCE_LENGTH)
+        print('Files concatenated.')
+    
+    print('Creating mapping...')
     create_mapping(songs, MAPPING_PATH)
     
     print('Generating training sequences...')
     inputs, targets = generate_training_sequences(SEQUENCE_LENGTH)
-    print(inputs[0])
 
 if __name__ == '__main__':
     # us = m21.environment.UserSettings()
