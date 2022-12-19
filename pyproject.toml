@@ -13,6 +13,9 @@ torchsummary = "^1.5.1"
 python-dotenv = "^0.21.0"
 tensorflow = "^2.11.0"
 keras = "^2.11.0"
+beautifulsoup4 = "^4.11.1"
+lxml = "^4.9.2"
+pyspark = "^3.3.1"
 
 
 

@@ -1,4 +1,6 @@
 data/
+dataset/
+savedmidi/
 tests/
 
 .DS_Store
